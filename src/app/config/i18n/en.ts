@@ -93,6 +93,57 @@ export const locale = {
 					ADD_MESSAGE: 'Customer has been created'
 				}
 			}
+		},
+		SETUP: {
+			COMMON: {
+				SELECTED_RECORDS_COUNT: 'Selected records count: ',
+				ALL: 'All',
+				SEARCH: 'Search',
+				IN_ALL_FIELDS: 'in all fields'
+			},
+			SETUP: 'Setup',
+			DEPARTMENTS: {
+				DEPARTMENTS: 'Departments',
+				DEPARTMENTS_LIST: 'Departments list',
+				NEW_DEPARTMENT: 'New Department',
+				DELETE_DEPARTMENT_SIMPLE: {
+					TITLE: 'Department Delete',
+					DESCRIPTION: 'Are you sure to permanently delete this department?',
+					WAIT_DESCRIPTION: 'Department is deleting...',
+					MESSAGE: 'Department has been deleted'
+				},
+				DELETE_DEPARTMENT_MULTY: {
+					TITLE: 'Departments Delete',
+					DESCRIPTION: 'Are you sure to permanently delete selected departments?',
+					WAIT_DESCRIPTION: 'Departments are deleting...',
+					MESSAGE: 'Selected departments have been deleted'
+				},
+				EDIT: {
+					UPDATE_MESSAGE: 'Department has been updated',
+					ADD_MESSAGE: 'Department has been created'
+				}
+			},
+			DESIGNATIONS: {
+				DESIGNATIONS: 'Designations',
+				DESIGNATIONS_LIST: 'Designations list',
+				NEW_DESIGNATION: 'New Designation',
+				DELETE_DESIGNATION_SIMPLE: {
+					TITLE: 'Designation Delete',
+					DESCRIPTION: 'Are you sure to permanently delete this designation?',
+					WAIT_DESCRIPTION: 'Designation is deleting...',
+					MESSAGE: 'Designation has been deleted'
+				},
+				DELETE_DESIGNATION_MULTY: {
+					TITLE: 'Designations Delete',
+					DESCRIPTION: 'Are you sure to permanently delete selected designations?',
+					WAIT_DESCRIPTION: 'Designations are deleting...',
+					MESSAGE: 'Selected designations have been deleted'
+				},
+				EDIT: {
+					UPDATE_MESSAGE: 'Designation has been updated',
+					ADD_MESSAGE: 'Designation has been created'
+				}
+			}
 		}
 	}
 };

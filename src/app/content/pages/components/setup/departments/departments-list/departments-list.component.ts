@@ -1,25 +1,25 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 // Material
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatDialog, MatPaginator, MatSnackBar, MatSort} from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog, MatPaginator, MatSnackBar, MatSort } from '@angular/material';
 // RXJS
-import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import {fromEvent, merge} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { fromEvent, merge } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 // Services
-import {DepartmentService} from '../../_core/services/department.service';
-import {LayoutUtilsService, MessageType} from '../../_core/utils/layout-utils.service';
+import { DepartmentService } from '../../_core/services/department.service';
+import { LayoutUtilsService, MessageType } from '../../_core/utils/layout-utils.service';
 // Models
-import {DepartmentsDatasource} from '../../_core/models/data-sources/departments.datasource';
-import {Department} from '../../_core/models/department';
-import {HttpParams} from '@angular/common/http';
-import {DepartmentEditComponent} from '../department-edit/department-edit.component';
+import { DepartmentsDatasource } from '../../_core/models/data-sources/departments.datasource';
+import { Department } from '../../_core/models/department';
+import { HttpParams } from '@angular/common/http';
+import { DepartmentEditComponent } from '../department-edit/department-edit.component';
 
 
 @Component({
-  selector: 'm-departments-list',
-  templateUrl: './departments-list.component.html',
-  styleUrls: ['./departments-list.component.scss']
+	selector: 'm-departments-list',
+	templateUrl: './departments-list.component.html',
+	styleUrls: ['./departments-list.component.scss']
 })
 export class DepartmentsListComponent implements OnInit {
 
@@ -37,10 +37,10 @@ export class DepartmentsListComponent implements OnInit {
 	departmentsResult: Department[] = [];
 
 	constructor(private departmentsService: DepartmentService,
-				public dialog: MatDialog,
-				public snackBar: MatSnackBar,
-				private layoutUtilsService: LayoutUtilsService,
-				private translate: TranslateService) { }
+		public dialog: MatDialog,
+		public snackBar: MatSnackBar,
+		private layoutUtilsService: LayoutUtilsService,
+		private translate: TranslateService) { }
 
 	/** LOAD DATA */
 	ngOnInit() {

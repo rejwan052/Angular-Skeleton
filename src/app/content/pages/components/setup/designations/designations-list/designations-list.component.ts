@@ -87,7 +87,6 @@ export class DesignationsListComponent implements OnInit {
       .set('sort', this.sort.active + ',' + this.sort.direction)
       .set('name', this.searchInput.nativeElement.value);
     this.dataSource.loadDesignations(params);
-    this.selection.clear();
   }
 
   /** Add */

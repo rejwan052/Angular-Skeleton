@@ -1,3 +1,176 @@
-<p>
-  employees-list works!
-</p>
+<m-portlet [options]="{headLarge: true}" [loading$]="dataSource.loading$">
+  <!-- start::Header (attributtes: mPortletHeadTitle|mPortletHeadTools) -->
+  <ng-container mPortletHeadTitle>
+    <div class="m-portlet__head-title">
+      <h3 class="m-portlet__head-text">
+        Employees List
+      </h3>
+    </div>
+  </ng-container>
+  <ng-container mPortletHeadTools>
+    <a [routerLink]="['/setup/employees/add']" mat-raised-button color="primary" matTooltip="Create new employee">New employee</a>
+  </ng-container>
+  <!-- end::Header -->
+
+  <!-- start::Body (attribute: mPortletBody) -->
+  <ng-container mPortletBody>
+    <!-- start::FILTERS & GROUP ACTIONS -->
+    <div class="m-form">
+      <!-- start::FILTERS -->
+      <div class="m-form__filtration">
+        <div class="row align-items-center">
+          <div class="col-md-2 m--margin-bottom-10-mobile">
+
+            <!-- <div class="m-form__control">
+              <mat-form-field>
+                <mat-select [(value)]="filterStatus" (selectionChange)="loadProductsList()" class="mat-form-field mat-form-field-fluid">
+                  <mat-option value="">All</mat-option>
+                  <mat-option value="0">Selling</mat-option>
+                  <mat-option value="1">Sold</mat-option>
+                </mat-select>
+                <mat-hint align="start">
+                  <strong>Filter by Status</strong>
+                </mat-hint>
+              </mat-form-field>
+            </div> -->
+
+          </div>
+          <div class="col-md-2 m--margin-bottom-10-mobile">
+
+            <!-- <div class="m-form__control">
+              <mat-form-field>
+                <mat-select [(value)]="filterCondition" (selectionChange)="loadProductsList()" class="mat-form-field mat-form-field-fluid">
+                  <mat-option value="">All</mat-option>
+                  <mat-option value="0">New</mat-option>
+                  <mat-option value="1">Used</mat-option>
+                </mat-select>
+                <mat-hint align="start">
+                  <strong>Filter by Contidion</strong>
+                </mat-hint>
+              </mat-form-field>
+            </div> -->
+
+            <div class="d-md-none m--margin-bottom-10"></div>
+          </div>
+          <div class="col-md-4 m--margin-bottom-10-mobile">
+            <mat-form-field>
+              <input matInput placeholder="Search employee" #searchInput placeholder="Search" class="mat-form-field mat-form-field-fluid">
+              <mat-hint align="start">
+                <strong>Search in all fields</strong>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <!-- end::FILTERS -->
+
+      <!-- start::GROUP ACTIONS -->
+      <!-- Group actions list: 'Delete selected' | 'Fetch selected' | 'Update status for selected' -->
+      <!-- Group actions are shared for all LISTS | See '../../_shared' folder -->
+
+      <!-- end::GROUP ACTIONS -->
+    </div>
+    <!-- end::FILTERS & GROUP ACTIONS -->
+
+    <!-- MATERIAL TABLE | Binded to datasources -->
+    <!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+    <div class="mat-table__wrapper">
+      <!-- Checkbox Column -->
+      <!-- Table with selection -->
+      <!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+      <mat-table class="lmat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef class="mat-column-checkbox">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" class="mat-column-checkbox">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.firstName}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.lastName}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.email}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Gender</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.gender}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateOfBirth">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date of Birth</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.dateOfBirth}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="designation">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Designation</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.designation.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Department</mat-header-cell>
+          <mat-cell *matCellDef="let employee">{{employee.department.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>
+            Actions
+          </mat-header-cell>
+          <mat-cell *matCellDef="let employee">
+            <a [routerLink]="['/setup/employeess/edit']" [queryParams]="{id: employee.id}" mat-icon-button color="primary" matTooltip="Edit employee">
+              <mat-icon>create</mat-icon>
+            </a>&nbsp;
+            <button mat-icon-button color="warn" type="button" (click)="deleteEmployee(employee)" matTooltip="Delete employee">
+              <mat-icon>delete</mat-icon>
+            </button>&nbsp;
+            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More actions">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item type="button">
+                <mat-icon>subject</mat-icon>
+                <span>Remarks</span>
+              </button>
+              <button mat-menu-item type="button">
+                <mat-icon>assignment</mat-icon>
+                <span>Specifications</span>
+              </button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+
+      <div class="mat-table__message" *ngIf="!dataSource.hasItems">No records found</div>
+    </div>
+
+    <!-- start: BOTTOM -->
+    <div class="mat-table__bottom">
+      <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.paginatorTotal$ | async" [showFirstLastButtons]="true"></mat-paginator>
+    </div>
+    <!-- end: BOTTOM -->
+  </ng-container>
+  <!-- end::Body -->
+</m-portlet>

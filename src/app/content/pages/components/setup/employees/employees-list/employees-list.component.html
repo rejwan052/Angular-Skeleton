@@ -118,7 +118,7 @@
 
         <ng-container matColumnDef="dateOfBirth">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Date of Birth</mat-header-cell>
-          <mat-cell *matCellDef="let employee">{{employee.dateOfBirth}}</mat-cell>
+          <mat-cell *matCellDef="let employee">{{employee.dateOfBirth | date:'mediumDate'}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="designation">
@@ -136,25 +136,12 @@
             Actions
           </mat-header-cell>
           <mat-cell *matCellDef="let employee">
-            <a [routerLink]="['/setup/employeess/edit']" [queryParams]="{id: employee.id}" mat-icon-button color="primary" matTooltip="Edit employee">
+            <a [routerLink]="['/setup/employees/edit']" [queryParams]="{id: employee.id}" mat-icon-button color="primary" matTooltip="Edit employee">
               <mat-icon>create</mat-icon>
             </a>&nbsp;
             <button mat-icon-button color="warn" type="button" (click)="deleteEmployee(employee)" matTooltip="Delete employee">
               <mat-icon>delete</mat-icon>
-            </button>&nbsp;
-            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More actions">
-              <mat-icon>more_vert</mat-icon>
             </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item type="button">
-                <mat-icon>subject</mat-icon>
-                <span>Remarks</span>
-              </button>
-              <button mat-menu-item type="button">
-                <mat-icon>assignment</mat-icon>
-                <span>Specifications</span>
-              </button>
-            </mat-menu>
           </mat-cell>
         </ng-container>
 

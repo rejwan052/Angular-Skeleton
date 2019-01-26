@@ -64,4 +64,4 @@ import { PortletDirective } from './directives/portlet.directive';
 	],
 	providers: []
 })
-export class CoreModule {}
+export class CoreModule { }

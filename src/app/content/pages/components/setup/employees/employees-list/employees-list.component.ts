@@ -98,7 +98,7 @@ export class EmployeesListComponent implements OnInit {
   restoreState(queryParams: HttpParams, id: number) {
     if (id > 0) {
       this.employeeService.getEmployeeByEmployeeId(id).subscribe((res: Employee) => {
-        const message = res._createdDate === res._updatedDate ?
+        const message = res.createdAt === res.updatedAt ?
           `New employee successfully has been added.` :
           `Employee successfully has been saved.`;
         this.layoutUtilsService.showActionNotification(message, res._isNew ? MessageType.Create : MessageType.Update, 10000, true, false);

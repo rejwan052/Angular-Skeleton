@@ -1,6 +1,6 @@
-import {IEdit} from './interfaces/edit.interface';
-import {IFilter} from './interfaces/filter.interface';
-import {ILog} from './interfaces/log.interface';
+import { IEdit } from './interfaces/edit.interface';
+import { IFilter } from './interfaces/filter.interface';
+import { ILog } from './interfaces/log.interface';
 
 export class BaseModel implements IEdit, IFilter, ILog {
 	// Edit
@@ -13,6 +13,6 @@ export class BaseModel implements IEdit, IFilter, ILog {
 	_defaultFieldName: string = '';
 	// Log
 	_userId: number = 0; // Admin
-	_createdDate: string;
-	_updatedDate: string;
+	createdAt: string;
+	updatedAt: string;
 }

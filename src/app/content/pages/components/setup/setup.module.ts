@@ -52,6 +52,9 @@ import { DepartmentsListComponent } from './departments/departments-list/departm
 import { DepartmentEditComponent } from './departments/department-edit/department-edit.component';
 import { DesignationEditComponent } from './designations/designation-edit/designation-edit.component';
 
+import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from "@angular/material";
+import { AppDateAdapter, APP_DATE_FORMATS } from './_core/date.adapter';
+
 
 const routes: Routes = [
 	{
@@ -131,6 +134,8 @@ const routes: Routes = [
 			width: '900px'
 		}
 	},
+	{ provide: DateAdapter, useClass: AppDateAdapter },
+	{ provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
 		HttpUtilsService,
 		DepartmentService,
 		TypesUtilsService,

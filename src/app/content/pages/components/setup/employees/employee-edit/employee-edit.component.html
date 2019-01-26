@@ -1,3 +1,161 @@
-<p>
-  employee-edit works!
-</p>
+<m-portlet [options]="{headLarge: true, enableSticky: true}" [loading$]="loading$">
+
+  <ng-container mPortletHeadTitle>
+    <div class="m-portlet__head-title">
+      <h3 class="m-portlet__head-text">
+        {{ getComponentTitle() }}
+      </h3>
+    </div>
+  </ng-container>
+  <ng-container mPortletHeadTools>
+    <button type="button" (click)="goBack()" mat-raised-button matTooltip="Back to the employees list">Back</button>&nbsp;
+    <button mat-raised-button (click)="reset()" [disabled]="selectedTab !== 0" matTooltip="Reset changes">Reset</button>&nbsp;
+
+    <div class="m-buttons--wrapper">
+      <button type="button" (click)="onSumbit(false)" mat-raised-button color="primary" matTooltip="Save & Continue">Save</button>
+      <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item color="primary" (click)="onSumbit(true)">Save & Exit</button>
+        <button mat-menu-item color="primary" (click)="onSumbit(false)">Save & Continue</button>
+      </mat-menu>
+    </div>
+  </ng-container>
+  <ng-container mPortletBody>
+    <mat-tab-group [(selectedIndex)]="selectedTab" *ngIf="employee">
+      <mat-tab label="Basic Info">
+        <ng-template matTabContent>
+          <!--begin::Form-->
+          <form [formGroup]="employeeForm" class="m-form m-form--group-seperator-dashed">
+
+            <m-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000" (close)="onAlertClose($event)">
+              Oh snap! Change a few things up and try submitting again.
+            </m-alert>
+
+            <div class="m-form__section m-form__section--first">
+
+              <div class="m-form__group">
+                <div class="row">
+
+                  <div class="col-md-4 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Enter first name" formControlName="firstName">
+                      <mat-error>
+                        First name is
+                        <strong>required</strong>
+                      </mat-error>
+                      <mat-hint align="start">Please enter
+                        <strong>first name</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-4 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Enter last name" formControlName="lastName">
+                      <mat-hint align="start">Please enter
+                        <strong>last name</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-4 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input type="email" matInput placeholder="Enter email" formControlName="email">
+                      <mat-error>Email is
+                        <strong>required</strong>
+                      </mat-error>
+                      <mat-hint align="start">Please enter
+                        <strong>Email</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="m-form__group">
+                <div class="row">
+                  <div class="col-md-4 m--margin-bottom-10-mobile">
+                    <div>Gender:</div>
+                    <mat-radio-group formControlName="gender" class="example-radio-group">
+                      <mat-radio-button class="example-radio-button" value="MALE">Male</mat-radio-button>
+                      <mat-radio-button class="example-radio-button" value="FEMALE">Female</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-md-4 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a Date of Birth" formControlName="dob" />
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                      <mat-hint align="start">Please enter
+                        <strong>Date of Birth</strong> in 'dd/mm/yyyy' format</mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="m-form__group">
+                <div class="row">
+                  <!-- Designation -->
+                  <div class="col-md-6 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Choose a designation" [matAutocomplete]="designationsAutoComplete" formControlName='designation'>
+                      <mat-autocomplete #designationsAutoComplete="matAutocomplete" [displayWith]="displayDesignation">
+                        <mat-option *ngIf="isDesignationLoading" class="is-loading">
+                          <mat-spinner diameter="20"></mat-spinner>
+                        </mat-option>
+                        <ng-container *ngIf="!isDesignationLoading">
+                          <mat-option *ngFor="let designation of filteredDesignations" [value]="designation">
+                            <span>{{ designation.name }}</span>
+                            <!-- <small> | ID: {{designation.id}}</small> -->
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                      <mat-error>
+                        Designation is
+                        <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Department -->
+                  <div class="col-md-6 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Choose a department" [matAutocomplete]="departmentsAutoComplete" formControlName='department'>
+                      <mat-autocomplete #departmentsAutoComplete="matAutocomplete" [displayWith]="displayDepartment">
+                        <mat-option *ngIf="isDepartmentLoading" class="is-loading">
+                          <mat-spinner diameter="20"></mat-spinner>
+                        </mat-option>
+                        <ng-container *ngIf="!isDepartmentLoading">
+                          <mat-option *ngFor="let department of filteredDepartments" [value]="department">
+                            <span>{{ department.name }}</span>
+                            <!-- <small> | ID: {{department.id}}</small> -->
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                      <mat-error>
+                        Department is
+                        <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </form>
+          <!--end::Form-->
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Address" [disabled]="!employee.id">
+        <ng-template matTabContent>
+          <!-- <m-remarks-list [remarksListState]="remarksListState" [(loadingSubject)]="loadingSubject"></m-remarks-list> -->
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Account Details" [disabled]="!employee.id">
+        <ng-template matTabContent>
+          <!-- <m-specifications-list [specsListState]="specsListState" [(loadingSubject)]="loadingSubject"></m-specifications-list> -->
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+</m-portlet>

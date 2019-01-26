@@ -4,6 +4,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Page } from '../models/page';
 import { Designation } from '../models/designation';
+import { IDesignationResponse } from '../interfaces/idesignation-response';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

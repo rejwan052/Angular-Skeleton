@@ -1,12 +1,14 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../../environments/environment';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Page} from '../models/page';
-import {Department} from '../models/department';
+import { Injectable } from '@angular/core';
+import { environment } from '../../../../../../../environments/environment';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Page } from '../models/page';
+import { Department } from '../models/department';
+import { IDepartmentResponse } from '../interfaces/idepartment-response';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class DepartmentService {
 

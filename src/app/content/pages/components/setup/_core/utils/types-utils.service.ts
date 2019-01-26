@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 
 @Injectable()
@@ -34,11 +34,11 @@ export class TypesUtilsService {
 		let stringDate: string = '';
 		if (date) {
 			stringDate += this.isNumber(date.month) ? this.padNumber(date.month) + '/' : '';
-            stringDate += this.isNumber(date.day) ? this.padNumber(date.day) + '/' : '';
+			stringDate += this.isNumber(date.day) ? this.padNumber(date.day) + '/' : '';
 
 			stringDate += date.year;
-        }
-        return stringDate;
+		}
+		return stringDate;
 	}
 
 	getDateFormatterFromString(dateInStr: string): any {
@@ -69,6 +69,23 @@ export class TypesUtilsService {
 			const year = this.toInteger(dateParts[2]);
 			const month = this.toInteger(dateParts[0]);
 			const day = this.toInteger(dateParts[1]);
+			// tslint:disable-next-line:prefer-const
+			let result = new Date();
+			result.setDate(day);
+			result.setMonth(month - 1);
+			result.setFullYear(year);
+			return result;
+		}
+
+		return new Date();
+	}
+
+	getDateFromISOString(dateInStr: string = ''): Date {
+		if (dateInStr && dateInStr.length > 0) {
+			const dateParts = dateInStr.trim().split('-');
+			const year = this.toInteger(dateParts[0]);
+			const month = this.toInteger(dateParts[1]);
+			const day = this.toInteger(dateParts[2]);
 			// tslint:disable-next-line:prefer-const
 			let result = new Date();
 			result.setDate(day);

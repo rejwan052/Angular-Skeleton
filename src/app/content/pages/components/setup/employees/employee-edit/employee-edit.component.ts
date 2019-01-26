@@ -238,7 +238,7 @@ export class EmployeeEditComponent implements OnInit {
     }
     console.log('_employee date of birth', _employee.dateOfBirth);
     _employee.updatedAt = this.typesUtilsService.getDateStringFromDate();
-    _employee.createdAt = this.employee.id > 0 ? _employee.createdAt : _employee.createdAt;
+    _employee.createdAt = this.employee.id > 0 ? _employee.createdAt : _employee.updatedAt;
     _employee._isNew = this.employee.id > 0 ? false : true;
     _employee._isUpdated = this.employee.id > 0;
 

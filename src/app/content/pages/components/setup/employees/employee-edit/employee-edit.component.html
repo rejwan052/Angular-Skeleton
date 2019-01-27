@@ -40,7 +40,7 @@
 
                   <div class="col-md-4 m--margin-bottom-10-mobile">
                     <mat-form-field class="mat-form-field-fluid">
-                      <input matInput placeholder="Enter first name" formControlName="firstName">
+                      <input matInput placeholder="Enter first name*" formControlName="firstName">
                       <mat-error>
                         First name is
                         <strong>required</strong>
@@ -60,7 +60,7 @@
                   </div>
                   <div class="col-md-4 m--margin-bottom-10-mobile">
                     <mat-form-field class="mat-form-field-fluid">
-                      <input type="email" matInput placeholder="Enter email" formControlName="email">
+                      <input type="email" matInput placeholder="Enter email*" formControlName="email">
                       <mat-error>Email is
                         <strong>required</strong>
                       </mat-error>
@@ -98,10 +98,10 @@
                   <!-- Designation -->
                   <div class="col-md-6 m--margin-bottom-10-mobile">
                     <mat-form-field class="mat-form-field-fluid">
-                      <input matInput placeholder="Choose a designation" [matAutocomplete]="designationsAutoComplete" formControlName='designation'>
+                      <input matInput placeholder="Choose a designation*" [matAutocomplete]="designationsAutoComplete" formControlName='designation'>
                       <mat-autocomplete #designationsAutoComplete="matAutocomplete" [displayWith]="displayDesignation">
                         <mat-option *ngIf="isDesignationLoading" class="is-loading">
-                          <mat-spinner diameter="20"></mat-spinner>
+                          <mat-spinner diameter="50"></mat-spinner>
                         </mat-option>
                         <ng-container *ngIf="!isDesignationLoading">
                           <mat-option *ngFor="let designation of filteredDesignations" [value]="designation">
@@ -120,10 +120,10 @@
                   <!-- Department -->
                   <div class="col-md-6 m--margin-bottom-10-mobile">
                     <mat-form-field class="mat-form-field-fluid">
-                      <input matInput placeholder="Choose a department" [matAutocomplete]="departmentsAutoComplete" formControlName='department'>
+                      <input matInput placeholder="Choose a department*" [matAutocomplete]="departmentsAutoComplete" formControlName='department'>
                       <mat-autocomplete #departmentsAutoComplete="matAutocomplete" [displayWith]="displayDepartment">
                         <mat-option *ngIf="isDepartmentLoading" class="is-loading">
-                          <mat-spinner diameter="20"></mat-spinner>
+                          <mat-spinner diameter="50"></mat-spinner>
                         </mat-option>
                         <ng-container *ngIf="!isDepartmentLoading">
                           <mat-option *ngFor="let department of filteredDepartments" [value]="department">

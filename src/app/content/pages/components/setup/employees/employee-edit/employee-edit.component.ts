@@ -100,8 +100,8 @@ export class EmployeeEditComponent implements OnInit {
       email: [this.employee.email, [Validators.required, Validators.email]],
       gender: [this.employee.gender, [Validators.required, Validators.min(0), Validators.max(1)]],
       dob: [this.employee.dob, Validators.nullValidator],
-      designation: [this.employee.designation, [Validators.required, Validators.min(0), Validators.max(1)]],
-      department: [this.employee.department, [Validators.required, Validators.min(0), Validators.max(1)]]
+      designation: [this.employee.designation, Validators.required],
+      department: [this.employee.department, Validators.required]
     });
 
     this.searchDesignations();
@@ -150,7 +150,7 @@ export class EmployeeEditComponent implements OnInit {
       .get('designation')
       .valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         tap(() => this.isDesignationLoading = true),
         switchMap(searchTerm => this.designationService.getAllDesignations(new HttpParams().set('name', searchTerm))
           .pipe(finalize(() => this.isDesignationLoading = false))
@@ -174,7 +174,7 @@ export class EmployeeEditComponent implements OnInit {
       .get('department')
       .valueChanges
       .pipe(
-        debounceTime(500),
+        debounceTime(1000),
         tap(() => this.isDepartmentLoading = true),
         switchMap(searchTerm => this.departmentService.getAllDepartments(new HttpParams().set('name', searchTerm))
           .pipe(finalize(() => this.isDepartmentLoading = false))

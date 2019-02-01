@@ -168,7 +168,7 @@ const routes: Routes = [
 		DeleteEntityDialogComponent,
 		FetchEntityDialogComponent,
 		UpdateStatusDialogComponent,
-		AlertComponent
+		AlertComponent,
 	]
 })
 export class SetupModule { }

@@ -14,6 +14,7 @@ import { DepartmentService } from '../../_core/services/department.service';
 import { DesignationService } from '../../_core/services/designation.service';
 import { debounceTime, distinctUntilChanged, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
+import { Address } from '../../_core/models/address';
 
 @Component({
   selector: 'm-employee-edit',
@@ -24,6 +25,10 @@ export class EmployeeEditComponent implements OnInit {
 
   employee: Employee;
   oldEmployee: Employee;
+
+  address: Address;
+  oldAddess: Address;
+
   selectedTab: number = 0;
   loadingSubject = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject.asObservable();
@@ -55,9 +60,20 @@ export class EmployeeEditComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       const id = +params.id;
       if (id && id > 0) {
-        this.employeeService.getEmployeeByEmployeeId(id).subscribe(res => {
-          this.employee = res;
-          this.oldEmployee = Object.assign({}, res);
+        this.employeeService.getEmployeeAndAddress(id).subscribe(results => {
+          console.log(" fork employee results ", results[0], " fork address results ", results[1]);
+          this.employee = results[0];
+          this.oldEmployee = Object.assign({}, results[0]);
+          if (results[1].length > 0) {
+            this.address = results[1][0];
+            this.oldAddess = Object.assign({}, results[1][0]);
+            console.log(" Employee Address::: ", this.address);
+          } else {
+            const newAddress = new Address();
+            newAddress.clear();
+            this.address = newAddress;
+            this.oldAddess = Object.assign({}, newAddress);
+          }
           this.initEmployee();
         });
       } else {
@@ -65,6 +81,12 @@ export class EmployeeEditComponent implements OnInit {
         newEmployee.clear();
         this.employee = newEmployee;
         this.oldEmployee = Object.assign({}, newEmployee);
+
+        const newAddress = new Address();
+        newAddress.clear();
+        this.address = newAddress;
+        this.oldAddess = Object.assign({}, newAddress);
+
         this.initEmployee();
       }
     });
@@ -91,8 +113,10 @@ export class EmployeeEditComponent implements OnInit {
 
   createForm() {
 
-    this.employee.dob = this.typesUtilsService.getDateFromISOString(this.employee.dateOfBirth);
-    console.log("employee dob ", this.employee.dob);
+    if (this.employee.dateOfBirth) {
+      this.employee.dob = this.typesUtilsService.getDateFromISOString();
+      console.log("employee dob ", this.employee.dob);
+    }
 
     this.employeeForm = this.employeeFB.group({
       firstName: [this.employee.firstName, Validators.required],
@@ -101,7 +125,11 @@ export class EmployeeEditComponent implements OnInit {
       gender: [this.employee.gender, [Validators.required, Validators.min(0), Validators.max(1)]],
       dob: [this.employee.dob, Validators.nullValidator],
       designation: [this.employee.designation, Validators.required],
-      department: [this.employee.department, Validators.required]
+      department: [this.employee.department, Validators.required],
+      addressLine1: [this.address.addressLine1],
+      addressLine2: [this.address.addressLine2],
+      city: [this.address.city],
+      town: [this.address.town]
     });
 
     this.searchDesignations();
@@ -150,7 +178,7 @@ export class EmployeeEditComponent implements OnInit {
       .get('designation')
       .valueChanges
       .pipe(
-        debounceTime(1000),
+        debounceTime(500),
         tap(() => this.isDesignationLoading = true),
         switchMap(searchTerm => this.designationService.getAllDesignations(new HttpParams().set('name', searchTerm))
           .pipe(finalize(() => this.isDesignationLoading = false))
@@ -174,7 +202,7 @@ export class EmployeeEditComponent implements OnInit {
       .get('department')
       .valueChanges
       .pipe(
-        debounceTime(1000),
+        debounceTime(500),
         tap(() => this.isDepartmentLoading = true),
         switchMap(searchTerm => this.departmentService.getAllDepartments(new HttpParams().set('name', searchTerm))
           .pipe(finalize(() => this.isDepartmentLoading = false))
@@ -222,6 +250,7 @@ export class EmployeeEditComponent implements OnInit {
 
     const controls = this.employeeForm.controls;
     const _employee = new Employee();
+
     _employee.id = this.employee.id;
     _employee.firstName = controls['firstName'].value;
     _employee.lastName = controls['lastName'].value;
@@ -229,6 +258,15 @@ export class EmployeeEditComponent implements OnInit {
     _employee.gender = controls['gender'].value;
     _employee.designation = controls['designation'].value;
     _employee.department = controls['department'].value;
+
+    const _address = new Address();
+    _address.id = this.address.id;
+    _address.addressLine1 = controls['addressLine1'].value;
+    _address.addressLine2 = controls['addressLine2'].value;
+    _address.town = controls['town'].value;
+    _address.city = controls['city'].value;
+
+    _employee.address = _address;
 
     const _date = controls['dob'].value;
     if (_date) {

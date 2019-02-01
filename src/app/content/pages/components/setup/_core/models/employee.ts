@@ -26,7 +26,7 @@ export class Employee extends BaseModel {
     this.dob = new Date();
     this.department = null;
     this.designation = null;
-    this.address = new Address();
+    this.address = null;
   }
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from '../../_core/models/employee';
 import { BehaviorSubject, Subject, forkJoin } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, EmailValidator } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../../_core/services/employee.service';
 import { TypesUtilsService } from '../../_core/utils/types-utils.service';
@@ -15,6 +15,7 @@ import { DesignationService } from '../../_core/services/designation.service';
 import { debounceTime, distinctUntilChanged, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { Address } from '../../_core/models/address';
+import { EmailValidators } from '../../validators/email.validators'
 
 @Component({
   selector: 'm-employee-edit',
@@ -92,6 +93,10 @@ export class EmployeeEditComponent implements OnInit {
     });
   }
 
+  // convenience getter for easy access to form fields
+  get f() { return this.employeeForm.controls; }
+
+
   initEmployee() {
     this.createForm();
     this.loadingSubject.next(false);
@@ -121,7 +126,9 @@ export class EmployeeEditComponent implements OnInit {
     this.employeeForm = this.employeeFB.group({
       firstName: [this.employee.firstName, Validators.required],
       lastName: [this.employee.lastName],
-      email: [this.employee.email, [Validators.required, Validators.email]],
+      email: [this.employee.email,
+      [Validators.required, Validators.email, EmailValidators.connotContainSpace],
+      EmailValidators.checkEmailExists(this.employeeService, this.employee.id.toString())],
       gender: [this.employee.gender, [Validators.required, Validators.min(0), Validators.max(1)]],
       dob: [this.employee.dob, Validators.nullValidator],
       designation: [this.employee.designation, Validators.required],

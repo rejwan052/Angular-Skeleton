@@ -5,7 +5,7 @@ import { BaseModel } from './_base.model';
 
 export class Employee extends BaseModel {
 
-  id: number;
+  id: number = 0;
   email: string;
   firstName: string;
   lastName: string;

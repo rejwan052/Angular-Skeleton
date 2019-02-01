@@ -53,4 +53,10 @@ export class EmployeeService {
     return forkJoin([employeeResponse, addressResponse]);
   }
 
+  checkEmailExists(email: string, employeeId: string): Observable<boolean> {
+    const params = new HttpParams().set('email', email)
+      .set('employeeId', employeeId);
+    return this.http.get<boolean>(this.EMPLOYEE_URL + 'check-email', { params })
+  }
+
 }

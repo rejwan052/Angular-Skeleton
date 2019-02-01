@@ -46,10 +46,14 @@
             <div class="col-md-4 m--margin-bottom-10-mobile">
               <mat-form-field class="mat-form-field-fluid">
                 <input matInput placeholder="Enter first name*" formControlName="firstName">
-                <mat-error>
-                  First name is
-                  <strong>required</strong>
-                </mat-error>
+
+                <div *ngIf="f.firstName.touched && f.firstName.invalid">
+                  <mat-error *ngIf="f.firstName?.errors.required">
+                    First name is
+                    <strong>required</strong>
+                  </mat-error>
+                </div>
+
                 <mat-hint align="start">Please enter
                   <strong>first name</strong>
                 </mat-hint>
@@ -66,12 +70,30 @@
             <div class="col-md-4 m--margin-bottom-10-mobile">
               <mat-form-field class="mat-form-field-fluid">
                 <input type="email" matInput placeholder="Enter email*" formControlName="email">
-                <mat-error>Email is
-                  <strong>required</strong>
-                </mat-error>
+
+                <div *ngIf="f.email.pending">
+                  <mat-progress-bar mode="buffer"></mat-progress-bar>
+                </div>
+
+                <div *ngIf="f.email.touched && f.email.invalid">
+                  <mat-error *ngIf="f.email?.errors.required">Email is
+                    <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="f.email?.errors.email">Email must be a
+                    <strong>valid email address</strong>
+                  </mat-error>
+                  <mat-error *ngIf="f.email?.errors.connotContainSpace">Email can't
+                    <strong>contain space</strong>
+                  </mat-error>
+                  <mat-error *ngIf="f.email?.errors.duplicateEmail">This email
+                    <strong>is already taken!</strong>
+                  </mat-error>
+                </div>
+
                 <mat-hint align="start">Please enter
                   <strong>Email</strong>
                 </mat-hint>
+
               </mat-form-field>
             </div>
           </div>

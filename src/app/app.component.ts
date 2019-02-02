@@ -27,12 +27,12 @@ import { locale as frLang } from './config/i18n/fr';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit {
-	title = 'Metronic';
+	title = 'Training Management Information System';
 
 	@HostBinding('style') style: any;
 	@HostBinding('class') classes: any = '';
 
-	@ViewChild('splashScreen', {read: ElementRef})
+	@ViewChild('splashScreen', { read: ElementRef })
 	splashScreen: ElementRef;
 	splashScreenImage: string;
 
@@ -74,11 +74,11 @@ export class AppComponent implements AfterViewInit, OnInit {
 		this.router.events
 			.pipe(filter(event => event instanceof NavigationEnd))
 			.subscribe(event => {
-				this.layoutConfigService.setModel({page: objectPath.get(this.pageConfigService.getCurrentPageConfig(), 'config')}, true);
+				this.layoutConfigService.setModel({ page: objectPath.get(this.pageConfigService.getCurrentPageConfig(), 'config') }, true);
 			});
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void { }
 
 	ngAfterViewInit(): void {
 		if (this.splashScreen) {

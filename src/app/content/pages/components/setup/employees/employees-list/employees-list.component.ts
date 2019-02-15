@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EmployeesDatasource } from '../../_core/models/data-sources/employees.datasource'
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Employee } from '../../_core/models/employee';
-import { ActivatedRoute } from '@angular/router';
-import { LayoutUtilsService, MessageType } from '../../_core/utils/layout-utils.service';
-import { EmployeeService } from '../../_core/services/employee.service';
-import { merge, fromEvent } from 'rxjs';
-import { tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { SubheaderService } from '../../../../../../core/services/layout/subheader.service';
-import { HttpParams } from '@angular/common/http';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {EmployeesDatasource} from '../../_core/models/data-sources/employees.datasource';
+import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+import {Employee} from '../../_core/models/employee';
+import {ActivatedRoute} from '@angular/router';
+import {LayoutUtilsService, MessageType} from '../../_core/utils/layout-utils.service';
+import {EmployeeService} from '../../_core/services/employee.service';
+import {fromEvent, merge} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {SubheaderService} from '../../../../../../core/services/layout/subheader.service';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'm-employees-list',
@@ -20,7 +20,7 @@ export class EmployeesListComponent implements OnInit {
 
   // Table fields
   dataSource: EmployeesDatasource;
-  displayedColumns = ['select', 'Id', 'firstName', 'lastName', 'email', 'gender', 'dateOfBirth', 'designation', 'department', 'actions'];
+  displayedColumns = ['select', 'Id', 'fullName', 'email', 'gender', 'dateOfBirth', 'designation', 'department', 'actions'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   // Filter fields
@@ -89,8 +89,6 @@ export class EmployeesListComponent implements OnInit {
       .set('page', this.paginator.pageIndex.toString())
       .set('size', this.paginator.pageSize.toString())
       .set('sort', this.sort.active + ',' + this.sort.direction)
-      .set('firstName', this.searchInput.nativeElement.value)
-      .set('lastName', this.searchInput.nativeElement.value)
       .set('email', this.searchInput.nativeElement.value);
     this.dataSource.loadEmployees(params);
   }
@@ -157,10 +155,6 @@ export class EmployeesListComponent implements OnInit {
     } else {
       this.employeesResult.forEach(row => this.selection.select(row));
     }
-  }
-
-  getEmployeeFullName(firstName: string = '', lastName: string = ''): string {
-    return firstName + lastName;
   }
 
 }

@@ -1,7 +1,7 @@
-import { Address } from "./address";
-import { Designation } from "./designation";
-import { Department } from "./department";
-import { BaseModel } from './_base.model';
+import {Address} from './address';
+import {Designation} from './designation';
+import {Department} from './department';
+import {BaseModel} from './_base.model';
 
 export class Employee extends BaseModel {
 
@@ -9,6 +9,7 @@ export class Employee extends BaseModel {
   email: string;
   firstName: string;
   lastName: string;
+  fullName:	string;
   userName: string;
   gender: string;
   dateOfBirth: string;

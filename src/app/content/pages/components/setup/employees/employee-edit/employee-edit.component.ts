@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Employee } from '../../_core/models/employee';
-import { BehaviorSubject, Subject, forkJoin } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, EmailValidator } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService } from '../../_core/services/employee.service';
-import { TypesUtilsService } from '../../_core/utils/types-utils.service';
-import { MatDialog } from '@angular/material';
-import { SubheaderService } from '../../../../../../core/services/layout/subheader.service';
-import { LayoutUtilsService, MessageType } from '../../_core/utils/layout-utils.service';
-import { Designation } from '../../_core/models/designation';
-import { Department } from '../../_core/models/department';
-import { DepartmentService } from '../../_core/services/department.service';
-import { DesignationService } from '../../_core/services/designation.service';
-import { debounceTime, distinctUntilChanged, tap, switchMap, finalize } from 'rxjs/operators';
-import { HttpParams } from '@angular/common/http';
-import { Address } from '../../_core/models/address';
-import { EmailValidators } from '../../validators/email.validators'
+import {Component, OnInit} from '@angular/core';
+import {Employee} from '../../_core/models/employee';
+import {BehaviorSubject, forkJoin} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {EmployeeService} from '../../_core/services/employee.service';
+import {TypesUtilsService} from '../../_core/utils/types-utils.service';
+import {MatDialog} from '@angular/material';
+import {SubheaderService} from '../../../../../../core/services/layout/subheader.service';
+import {LayoutUtilsService, MessageType} from '../../_core/utils/layout-utils.service';
+import {Designation} from '../../_core/models/designation';
+import {Department} from '../../_core/models/department';
+import {DepartmentService} from '../../_core/services/department.service';
+import {DesignationService} from '../../_core/services/designation.service';
+import {debounceTime, finalize, switchMap, tap} from 'rxjs/operators';
+import {HttpParams} from '@angular/common/http';
+import {Address} from '../../_core/models/address';
+import {EmailValidators} from '../../validators/email.validators';
 
 @Component({
   selector: 'm-employee-edit',
@@ -36,11 +36,11 @@ export class EmployeeEditComponent implements OnInit {
   employeeForm: FormGroup;
   hasFormErrors: boolean = false;
 
-  //Designations Auto Complete
+  // Designations Auto Complete
   filteredDesignations: Designation[];
   isDesignationLoading = false;
 
-  //Departments Auto Complete
+  // Departments Auto Complete
   filteredDepartments: Department[];
   isDepartmentLoading = false;
 
@@ -62,13 +62,13 @@ export class EmployeeEditComponent implements OnInit {
       const id = +params.id;
       if (id && id > 0) {
         this.employeeService.getEmployeeAndAddress(id).subscribe(results => {
-          console.log(" fork employee results ", results[0], " fork address results ", results[1]);
+          console.log(' fork employee results ', results[0], ' fork address results ', results[1]);
           this.employee = results[0];
           this.oldEmployee = Object.assign({}, results[0]);
           if (results[1].length > 0) {
             this.address = results[1][0];
             this.oldAddess = Object.assign({}, results[1][0]);
-            console.log(" Employee Address::: ", this.address);
+            console.log(' Employee Address::: ', this.address);
           } else {
             const newAddress = new Address();
             newAddress.clear();
@@ -120,7 +120,7 @@ export class EmployeeEditComponent implements OnInit {
 
     if (this.employee.dateOfBirth) {
       this.employee.dob = this.typesUtilsService.getDateFromISOString();
-      console.log("employee dob ", this.employee.dob);
+      console.log('employee dob ', this.employee.dob);
     }
 
     this.employeeForm = this.employeeFB.group({
@@ -172,7 +172,7 @@ export class EmployeeEditComponent implements OnInit {
       return result;
     }
 
-    result = `Edit employee - ${this.employee.firstName} ${this.employee.lastName}`;
+    result = `Edit employee - ${this.employee.fullName}`;
     return result;
   }
 
@@ -196,7 +196,7 @@ export class EmployeeEditComponent implements OnInit {
         this.filteredDesignations = res.content;
       },
         err => {
-          console.log("Error occurred while get searching designations.");
+          console.log('Error occurred while get searching designations.');
         });
   }
 
@@ -220,7 +220,7 @@ export class EmployeeEditComponent implements OnInit {
         this.filteredDepartments = res.content;
       },
         err => {
-          console.log("Error occurred while get searching departments.");
+          console.log('Error occurred while get searching departments.');
         });
   }
 
@@ -228,7 +228,7 @@ export class EmployeeEditComponent implements OnInit {
     if (department) { return department.name; }
   }
 
-  //Employee form submit
+  // Employee form submit
   onSumbit(withBack: boolean = false) {
     this.hasFormErrors = false;
     const controls = this.employeeForm.controls;

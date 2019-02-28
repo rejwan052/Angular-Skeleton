@@ -4,8 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../models/page';
 import { Department } from '../models/department';
-import { IDepartmentResponse } from '../interfaces/idepartment-response';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'

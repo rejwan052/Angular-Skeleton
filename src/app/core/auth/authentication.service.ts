@@ -9,11 +9,13 @@ import { TokenStorage } from './token-storage.service';
 import { UtilsService } from '../services/utils.service';
 import { AccessData } from './access-data';
 import { Credential } from './credential';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class AuthenticationService implements AuthService {
-	API_URL = 'api';
-	API_ENDPOINT_LOGIN = '/login';
+
+	API_URL = environment.baseUrl;
+	API_ENDPOINT_LOGIN = '/auth/signin';
 	API_ENDPOINT_REFRESH = '/refresh';
 	API_ENDPOINT_REGISTER = '/register';
 
@@ -100,9 +102,8 @@ export class AuthenticationService implements AuthService {
 	 * @returns {Observable<any>}
 	 */
 	public login(credential: Credential): Observable<any> {
-		// Expecting response from API
-		// {"id":1,"username":"admin","password":"demo","email":"admin@demo.com","accessToken":"access-token-0.022563452858263444","refreshToken":"access-token-0.9348573301432961","roles":["ADMIN"],"pic":"./assets/app/media/img/users/user4.jpg","fullname":"Mark Andre"}
-		return this.http.get<AccessData>(this.API_URL + this.API_ENDPOINT_LOGIN + '?' + this.util.urlParam(credential)).pipe(
+		return this.http.post<AccessData>(this.API_URL + this.API_ENDPOINT_LOGIN,
+			{'usernameOrEmail': credential.usernameOrEmail, 'password': credential.password}).pipe(
 			map((result: any) => {
 				if (result instanceof Array) {
 					return result.pop();
@@ -150,7 +151,8 @@ export class AuthenticationService implements AuthService {
 			this.tokenStorage
 				.setAccessToken(accessData.accessToken)
 				.setRefreshToken(accessData.refreshToken)
-				.setUserRoles(accessData.roles);
+				// .setUserRoles(accessData.roles);
+				.setUserRoles(['ADMIN']);
 			this.onCredentialUpdated$.next(accessData);
 		}
 	}

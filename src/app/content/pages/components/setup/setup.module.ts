@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SetupComponent } from './setup.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PartialsModule } from '../../../partials/partials.module';
 import { TranslateModule } from '@ngx-translate/core';
 // Core => Services
@@ -13,6 +13,7 @@ import { DepartmentService } from './_core/services/department.service';
 import { HttpUtilsService } from './_core/utils/http-utils.service';
 import { TypesUtilsService } from './_core/utils/types-utils.service';
 import { LayoutUtilsService } from './_core/utils/layout-utils.service';
+import { InterceptService } from './_core/utils/intercept.service';
 // Shared
 import { ActionNotificationComponent } from './_shared/action-natification/action-notification.component';
 import { DeleteEntityDialogComponent } from './_shared/delete-entity-dialog/delete-entity-dialog.component';
@@ -52,7 +53,7 @@ import { DepartmentsListComponent } from './departments/departments-list/departm
 import { DepartmentEditComponent } from './departments/department-edit/department-edit.component';
 import { DesignationEditComponent } from './designations/designation-edit/designation-edit.component';
 
-import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from "@angular/material";
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { AppDateAdapter, APP_DATE_FORMATS } from './_core/date.adapter';
 
 
@@ -125,17 +126,24 @@ const routes: Routes = [
 		MatTooltipModule,
 	],
 	exports: [RouterModule],
-	providers: [{
-		provide: MAT_DIALOG_DEFAULT_OPTIONS,
-		useValue: {
-			hasBackdrop: true,
-			panelClass: 'm-mat-dialog-container__wrapper',
-			height: 'auto',
-			width: '900px'
-		}
-	},
-	{ provide: DateAdapter, useClass: AppDateAdapter },
-	{ provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
+	providers: [
+		InterceptService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: InterceptService,
+			multi: true
+		},
+		{
+			provide: MAT_DIALOG_DEFAULT_OPTIONS,
+			useValue: {
+				hasBackdrop: true,
+				panelClass: 'm-mat-dialog-container__wrapper',
+				height: 'auto',
+				width: '900px'
+			}
+		},
+		{ provide: DateAdapter, useClass: AppDateAdapter },
+		{ provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS },
 		HttpUtilsService,
 		DepartmentService,
 		TypesUtilsService,
